@@ -66,6 +66,11 @@ exports.handler = async function () {
 
     return {
         statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",  // ✅ Allow all origins
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type"
+        },
         body: JSON.stringify(allBooks),
     };
 };
