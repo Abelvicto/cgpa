@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 exports.handler = async function () {
     // Load Cloudinary credentials from environment variables
