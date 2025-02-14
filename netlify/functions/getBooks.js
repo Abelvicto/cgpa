@@ -34,14 +34,21 @@ exports.handler = async function () {
             continue; // Skip this category if credentials are missing
         }
 
-        const url = `https://api.cloudinary.com/v1_1/${creds.cloudName}/resources/search?expression=resource_type:raw`;
+        // ✅ Restrict search to the correct folder
+        const url = `https://api.cloudinary.com/v1_1/${creds.cloudName}/resources/search?expression=resource_type:raw AND format:pdf AND public_id:${category}/*`;
         const auth = "Basic " + Buffer.from(`${creds.apiKey}:${creds.apiSecret}`).toString("base64");
 
         try {
+            console.log(`Fetching PDFs from ${category}...`); // Debugging log
+            console.log(`URL: ${url}`); // Debugging log
+
             const response = await fetch(url, { headers: { Authorization: auth } });
+            console.log(`Response status: ${response.status}`); // Debugging log
+
             if (!response.ok) throw new Error(`Failed to fetch from ${category}`);
 
             const data = await response.json();
+            console.log(`Fetched ${data.resources.length} files from ${category}`); // Debugging log
 
             data.resources.forEach(file => {
                 const fileName = file.public_id.split("/").pop();
